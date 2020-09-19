@@ -16,7 +16,24 @@ const mapStateToProps = (state) => {
   return { tasks, filter }
 }
 
-const filterTask = (tasks, { filterText, searchText }) => {
+const TodoList = ({ tasks, filter, saveTask, editTask }) => {
+  if (!tasks.length) {
+    return null
+  }
+  return (
+    <section>
+      <ul style={{ padding: 0, margin: 0 }}>
+        {filterTasks(tasks, filter).map((tasks) => {
+          return tasks.editingStatus
+            ? formView(tasks, { saveTask, editTask })
+            : todoItemView(tasks)
+        })}
+      </ul>
+    </section>
+  )
+}
+
+const filterTasks = (tasks, { filterText, searchText }) => {
   return tasks
     .filter(({ completed }) => {
       switch (filterText) {
@@ -35,31 +52,20 @@ const filterTask = (tasks, { filterText, searchText }) => {
     })
 }
 
-const TodoList = ({ tasks, filter, saveTask, editTask }) => {
-  if (!tasks.length) {
-    return null
-  }
+const formView = ({ id, text }, { saveTask, editTask }) => {
   return (
-    <section>
-      <ul style={{ padding: 0, margin: 0 }}>
-        {filterTask(
-          tasks,
-          filter
-        ).map(({ id, text, completed, editingStatus }) =>
-          editingStatus ? (
-            <EditingForm
-              id={id}
-              text={text}
-              key={id}
-              saveTask={saveTask}
-              editTask={editTask}
-            />
-          ) : (
-            <TodoItem id={id} text={text} completed={completed} key={id} />
-          )
-        )}
-      </ul>
-    </section>
+    <EditingForm
+      id={id}
+      text={text}
+      key={id}
+      saveTask={saveTask}
+      editTask={editTask}
+    />
   )
 }
+
+const todoItemView = ({ id, text, completed }) => {
+  return <TodoItem id={id} text={text} completed={completed} key={id} />
+}
+
 export default connect(mapStateToProps, actionCreators)(TodoList)

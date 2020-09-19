@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
   },
   todosForm: {
     display: 'flex',
-    backgroundColor: '#fafafa',
+    backgroundColor: '#fff',
     border: '1px solid rgba(0, 0, 0, 0.1)',
     borderTop: '1px solid rgba(0, 0, 0, 0.1)',
     padding: '7.5px 16px',
